@@ -22,7 +22,7 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
-    const TaskCollection = client.db("Task-Manage").collection("Tasks");
+    const TaskCollection = client.db("taskDB").collection("alltasks");
     // const userCollection = client.db("survey").collection("users");
     
     //jwt
@@ -81,10 +81,7 @@ async function run() {
     //   res.send(result);
     // });
     //All surveys
-    // app.get("/allSurveys", async (req, res) => {
-    //   const result = await surveyCollection.find().toArray();
-    //   res.send(result);
-    // });
+    // 
     // app.get("/allSurveys/:id", async (req, res) => {
     //   const id = req.params.id;
     //   const query = { _id: new ObjectId(id) };
@@ -119,22 +116,21 @@ async function run() {
 //     const result = await surveyCollection.updateOne(filter, updatedDoc);
 //     res.send(result);
 // });
-    // app.post("/allSurveys", async (req, res) => {
-    //   const { title, short_description, long_description, category, pending,total_votes } =
-    //     req.body;
-    //   const timestamp = new Date().getTime();
-    //   const newSurvey = {
-    //     title,
-    //     short_description,
-    //     long_description,
-    //     category,
-    //     total_votes,
-    //     timestamp,
-    //     pending
-    //   };
-    //   const result = await surveyCollection.insertOne(newSurvey);
-    //   res.json({ insertedId: result.insertedId });
-    // });
+app.get("/allTasks", async (req, res) => {
+    const result = await TaskCollection.find().toArray();
+    res.send(result);
+  });
+  app.post("/allTasks", async (req, res) => {
+    try {
+      const data = req.body; // Get the entire request body as data
+      const result = await TaskCollection.insertOne(data);
+      res.json({ insertedId: result.insertedId });
+    } catch (error) {
+      console.error('Error inserting task:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
 
     // app.put("/allSurveys/:id", async (req, res) => {
     //   const id = req.params.id;
@@ -198,21 +194,9 @@ async function run() {
     //   res.send(result);
     // });
    
-    
-    // app.post('/create-payment-intent', async (req, res) => {
-    //   const amount = parseInt( 39 * 100);
-    //   console.log(amount, 'amount inside the intent')
 
-    //   const paymentIntent = await stripe.paymentIntents.create({
-    //     amount: amount,
-    //     currency: 'usd',
-    //     payment_method_types: ['card']
-    //   });
 
-    //   res.send({
-    //     clientSecret: paymentIntent.client_secret
-    //   })
-    // });
+
 
     
     // Send a ping to confirm a successful connection
