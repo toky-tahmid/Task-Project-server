@@ -116,8 +116,15 @@ async function run() {
 //     const result = await surveyCollection.updateOne(filter, updatedDoc);
 //     res.send(result);
 // });
-app.get("/allTasks", async (req, res) => {
+app.get("/alltasks", async (req, res) => {
     const result = await TaskCollection.find().toArray();
+    res.send(result);
+  }); 
+
+  app.get("/alltask/:id", async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
+    const result = await TaskCollection.findOne(query);
     res.send(result);
   });
 
@@ -137,7 +144,26 @@ app.get("/allTasks", async (req, res) => {
     const result = await TaskCollection.deleteOne(query);
     res.send(result);
   });
-  
+  app.put("/alltasks/:id", async (req, res) => {
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id) }
+    const option = { upsert: true };
+    const updateJobTask = req.body;
+    const update = {
+      $set: {
+        title: updateJobTask.title,
+        deadline: updateJobTask.deadline,
+        description: updateJobTask.description,
+        priority: updateJobTask.priority,
+        status: updateJobTask.status,
+        startDate: updateJobTask.startDate,
+      }
+    }
+    const result = await TaskCollection.updateOne(filter, update, option)
+    res.send(result)
+  })
+ 
+ 
 
     // app.put("/allSurveys/:id", async (req, res) => {
     //   const id = req.params.id;
