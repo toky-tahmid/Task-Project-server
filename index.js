@@ -120,6 +120,7 @@ app.get("/allTasks", async (req, res) => {
     const result = await TaskCollection.find().toArray();
     res.send(result);
   });
+
   app.post("/allTasks", async (req, res) => {
     try {
       const data = req.body; // Get the entire request body as data
@@ -129,6 +130,12 @@ app.get("/allTasks", async (req, res) => {
       console.error('Error inserting task:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
+  });
+  app.delete("/allTasks/:id", async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
+    const result = await TaskCollection.deleteOne(query);
+    res.send(result);
   });
   
 
