@@ -22,71 +22,20 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
-    const TaskCollection = client.db("taskDB").collection("alltasks");
+    const DataCollection = client.db("task-db").collection("property-all");
    
-app.get("/alltasks", async (req, res) => {
-    const result = await TaskCollection.find().toArray();
+app.get("/allData", async (req, res) => {
+    const result = await DataCollection.find().toArray();
     res.send(result);
   }); 
 
-  app.get("/alltask/:id", async (req, res) => {
+  app.get("/countriesDetails/:id", async (req, res) => {
     const id = req.params.id;
     const query = { _id: new ObjectId(id) };
-    const result = await TaskCollection.findOne(query);
+    const result = await DataCollection.findOne(query);
     res.send(result);
   });
 
-  app.post("/allTasks", async (req, res) => {
-    try {
-      const data = req.body; // Get the entire request body as data
-      const result = await TaskCollection.insertOne(data);
-      res.json({ insertedId: result.insertedId });
-    } catch (error) {
-      console.error('Error inserting task:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  app.delete("/allTasks/:id", async (req, res) => {
-    const id = req.params.id;
-    const query = { _id: new ObjectId(id) };
-    const result = await TaskCollection.deleteOne(query);
-    res.send(result);
-  });
-  app.put("/alltasks/:id", async (req, res) => {
-    const id = req.params.id;
-    const filter = { _id: new ObjectId(id) }
-    const option = { upsert: true };
-    const updateJobTask = req.body;
-    const update = {
-      $set: {
-        title: updateJobTask.title,
-        deadline: updateJobTask.deadline,
-        description: updateJobTask.description,
-        priority: updateJobTask.priority,
-        status: updateJobTask.status,
-        startDate: updateJobTask.startDate,
-      }
-    }
-    const result = await TaskCollection.updateOne(filter, update, option)
-    res.send(result)
-  })
-  app.put("/alltask/:id", async (req, res) => {
-    const id = req.params.id;
-    const newStatus = req.body.status;
-  
-    try {
-      const result = await TaskCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: { status: newStatus } }
-      );
-  
-      res.json(result);
-    } catch (error) {
-      console.error('Error updating task status:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
@@ -104,5 +53,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Survey are going ${port}`);
+  console.log(`Uca  ${port}`);
 });
